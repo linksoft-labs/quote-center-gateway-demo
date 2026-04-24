@@ -1,0 +1,299 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "./pb;pb";
+
+// ActionType 事件类型
+enum ActionType {
+  ActionType_SUBSCRIBE = 0; // 订阅
+  ActionType_UNSUBSCRIBE = 1; // 取消订阅
+  ActionType_HEARTBEAT = 2; // 心跳
+  ActionType_LOGIN = 3; // 登录
+  ActionType_PUSHDATA = 4; // 推送数据
+}
+
+// ResponseType 响应类型
+enum ResponseType {
+  ResponseType_SUCCESS = 0;
+  ResponseType_FAILURE = 1;
+}
+
+// SubType 订阅类型
+enum SubType {
+  SubType_QUOTE = 0; // 行情数据 Q
+  SubType_TRADE = 1; // 交易数据 T
+  SubType_ORDER = 2; // 摆盘数据 O
+  SubType_BROKER = 3; // 经纪队列 B
+  SubType_BIDDING = 4; // 盘前盘后数据 A
+  SubType_STATIC = 5; // 静态数据 S
+}
+
+// Source 数据源
+enum Source {
+  Source_HKEX = 0; // 港交所
+  Source_FUTU = 1; // 富途
+  Source_NASDAQS = 2; // 纳斯达克证券市场
+  Source_SZSE = 3; // 深交所
+  Source_SSE = 4; // 上交所
+  Source_OTHER = 5; // 其他数据源/未披露数据源
+  Source_PHILLIP = 6; // 辉立
+}
+
+enum Flag {
+  Flag_NONE = 0; // 无
+  Flag_REALTIME = 1; // 实时数据
+  Flag_DELAYED = 2; // 延时数据（暂不支持）
+  Flag_GRAY = 3; // 暗盘数据
+}
+
+// Market 市场
+enum Market {
+  Market_HKEX = 0; // 港股
+  Market_US = 1; // 美股
+  Market_SZSE = 2; // 深交所
+  Market_SSE = 3; // 上交所
+  Market_COMEX = 4; // 纽约商业交易所
+  Market_CME = 8; // 芝加哥商品交易所
+  Market_SHFE = 9; // 上海期货交易所
+  Market_CZCE = 10; // 郑商所
+  Market_DCE = 11; // 大商所
+  Market_CFFEX = 12; // 中金所
+  Market_INE = 13; // 国际能源交易中心
+  Market_FOREX = 14; // 外汇市场
+  Market_USOTC = 15; // 美股OTC市场
+}
+
+// SecurityType 证券类型
+enum SecurityType {
+  SecurityType_UNKNOWN = 0; // 未知
+  SecurityType_EQUITY = 1; // 正股
+  SecurityType_INDEX = 2; // 指数
+  SecurityType_OTHER = 3; // 其他
+  SecurityType_FUTURE = 4; // 期货
+  SecurityType_BOND = 5; // 债券
+  SecurityType_FOREX = 6; // 外汇
+  SecurityType_CALL_AND_PUT = 11; //认购/认沽 涡轮(11)
+  SecurityType_BULL_AND_BEAR = 12; // 牛熊证
+  SecurityType_INLINE = 13; // 界内证
+  SecurityType_TRUST = 14; // 信托
+  SecurityType_REPO = 23; // 回购
+  SecurityType_BSHARE = 24; // b股
+  SecurityType_ETF = 41; // etf
+}
+
+// TradeSide 交易方向
+enum TradeSide {
+  TradeSide_B = 0; // 主动买入
+  TradeSide_S = 1; // 主动卖出
+  TradeSide_N = 2; // 中性盘
+}
+
+// TrdType 交易类型
+enum TrdType {
+  TrdType_AUTO_MATCH = 0; // 自动对盘
+  // ---------- 港股交易类型 ----------
+  TrdType_LATE = 1; // 开市前交易
+  TrdType_NONE_AUTO_MATCH = 2; // 非自动对盘
+  TrdType_INTER_AUTO_MATCH = 3; // 同一证券商自动对盘
+  TrdType_INTER_NONE_AUTO_MATCH = 4; // 同一证券商非自动对盘
+  TrdType_ODD_LOT = 5; // 碎股交易
+  TrdType_AUCTION = 6; // 竞价交易
+  TrdType_OVERSEAS = 7;// 海外交易
+  // ---------- 美股交易类型（未实装） ----------
+  TrdType_AUTO = 64; // 自动对盘（美股）
+  TrdType_BUNCHED = 66; // 批量交易
+  TrdType_CASH = 67; // 现金交易
+  TrdType_INTER_MARKET = 70; // 跨市场交易
+  TrdType_BUNCHED_SOLD = 71; // 批量卖出
+  TrdType_PRICE_VARIATION = 72; // 离价交易
+  TrdType_ODD_LOT_US = 111; // 碎股交易（美股）
+  TrdType_RULE = 75; // 第127条交易（纽交所规则）或第155条交易
+  TrdType_SOLD_LAST = 76; // Sold Last
+  TrdType_MARKET_CENTER_CLOSE_PRICE = 77; // 中央收市价
+  TrdType_NEXT_DAY = 78; // 隔日交易
+  TrdType_MARKET_CENTER_OPENING = 79; // 中央开盘价交易
+  TrdType_PRIOR_REFERENCE_PRICE = 80; // 前参考价
+  TrdType_MARKET_CENTER_OPEN_PRICE = 81; // 中央开盘价
+  TrdType_SELLER = 82; // 卖方
+  TrdType_FORM_T = 84; // T类交易（盘前和盘后交易）
+  TrdType_EXTENDED_TRADING = 85; // 延长交易时段
+  TrdType_CONTINGENT = 86; // 合单交易
+  TrdType_AVERAGE_PRICE = 87; // 平均价成交
+  TrdType_SOLD = 90; // 场外售出
+  TrdType_ODD_LOT_CROSS = 120; // 碎股跨市场交易
+  TrdType_DERIVATIVELY_PRICED = 52; // 衍生工具定价
+  TrdType_REOPENING_PRICE = 53; // 再开盘定价
+  TrdType_CLOSING_PRICE = 54; // 收盘定价
+  TrdType_QUALIFIED_CONTINGENT = 55; // 合单交易
+  TrdType_CONSOLIDATED = 57; // 综合延迟价格
+}
+
+// Request 订阅请求
+message Request {
+  optional ActionType action_type = 1; // 事件类型
+  optional Auth auth = 2; // 授权
+  repeated Security security = 3; // 订阅证券信息
+}
+
+// Response 响应
+message Response {
+  optional ActionType action_type = 1; // 事件类型
+  optional Resp response = 2; // 响应
+  repeated SecurityData security_data = 3; // 响应证券信息及数据
+}
+
+// SecurityData 证券数据
+message SecurityData {
+  optional Security security = 1; // 股票
+  optional Quote quote = 2; // 基础行情 Q
+  optional Trade trade = 3; // 交易 T
+  optional Order order = 4; // 摆盘 O
+  optional Broker broker = 5; // 经纪队列 B
+  optional Static static = 6; // 静态数据 S
+  optional Bidding bidding = 7; // 盘前盘后 A 仅美股
+}
+
+// Resp 响应消息
+message Resp {
+  optional ResponseType type = 1;
+  optional string msg = 2;
+}
+
+// Auth 授权信息
+message Auth {
+  optional string app_id = 1;
+  optional string app_secret = 2;
+}
+
+// Security 证券信息
+message Security {
+  optional Market market = 1; // 市场
+  optional SecurityType security_type = 2; // 股票类型
+  optional string symbol = 3; // 股票代码
+  optional SubType sub_type = 4; // 订阅类型
+  optional Source source = 5; // 数据源
+  optional Flag flag = 6; // 备用字段
+}
+
+// Quote 行情数据
+message Quote {
+  optional int64 time = 1; // 最新时间
+  optional double price = 2; // 最新价
+  optional double high = 3; // 最高价
+  optional double low = 4; // 最低价
+  optional double open = 5; // 开盘价
+  optional double close = 6; // 收盘价
+  optional int64 volume = 7; // 成交量
+  optional double amount = 8; // 成交额
+  optional double vwap = 9; // 加权均价 仅股票
+  optional double settle = 10; // 昨结算价 仅期货
+  optional uint64 position = 11; // 持仓量 仅期货
+  optional uint64 prev_position = 12; // 昨持仓量 仅期货
+  optional double bid_price = 13; // 买价 仅外汇
+  optional double ask_price = 14; // 卖价 仅外汇
+  optional double volume_float_part = 15; // 成交量，浮点部分，取值>= 0.0、< 1.0
+}
+
+// Bidding 盘前盘后行情数据 仅美股
+message Bidding {
+  optional int64 time = 1; // 最新时间
+  optional double price = 2; // 最新价
+  optional double high = 3; // 最高价
+  optional double low = 4; // 最低价
+  optional int64 volume = 7; // 成交量
+  optional double amount = 8; // 成交额
+  optional double chg = 9; // 涨跌额
+  optional double gain = 10; // 涨跌幅
+  optional double volume_float_part = 11; // 成交量，浮点部分，取值>= 0.0、< 1.0
+}
+
+// Trade 逐笔交易数据
+message Trade {
+  optional int64 trade_time = 1; // 交易时间
+  optional TradeSide side = 2; // 方向
+  optional double price = 3; // 价格
+  optional int64 quantity = 4; // 成交量
+  optional int64 position_quantity = 8; // 持仓变化量 仅期货
+  optional TrdType trd_type = 5; // 交易类型
+  optional double quantity_float_part = 6; // 成交量浮点部分s
+}
+
+// Order 盘口数据
+message Order {
+  optional int64 time = 1; // 最新时间
+  repeated OrderGear sell = 2; // 卖盘
+  repeated OrderGear buy = 3; // 卖盘
+}
+
+// OrderGear 盘口档位数据
+message OrderGear {
+  optional double price = 1; // 委托价格
+  optional int64 volume = 2; // 委托数量
+  optional int64 total_order_no = 3; // 委托订单数
+  optional int32 price_level = 4; // 档位
+}
+
+// BrokerGear 经纪席位档位数据 仅港股
+message BrokerGear {
+  optional string broker_id = 1; // 经纪席位ID
+  optional int32 price_level = 2; // 经纪席位档位
+}
+
+// Broker 经纪队列数据 仅港股
+message Broker {
+  optional int64 latest_time = 1; // 最新时间
+  repeated BrokerGear sell = 2; // 卖
+  repeated BrokerGear buy = 3; // 买
+}
+
+// Static 静态数据
+message Static {
+  optional string name_en = 9; // 英文名称
+  optional string name_zh = 3; // 中文简体
+  optional string name_tc = 4; // 中文繁体
+  optional string currency = 1; // 币种
+  optional int64 lot_size = 2; // 每手数目
+  optional double uplimit = 19; // 上限价
+  optional double downlimit = 20; // 下限价
+  optional int32 security_status = 8; // 证券交易状态
+  // ---------- 股票静态数据 ----------
+  optional string isin = 5; // 国际证券识别码
+  optional int64 listing_date = 6; // 上市日期
+  optional int64 delisting_date = 7; // 退市日期
+  // ---------- 港股静态数据 ----------
+  optional string spread_table_code = 21; // 港股价差表代码
+  // ---------- 轮证静态数据 ----------
+  optional string underlying_symbol = 15; // 标的
+  optional double conversion_ratio = 10; // 换股比率
+  optional double strike_price1 = 11; // 行使价1
+  optional double strike_price2 = 12; // 行使价2
+  optional double call_price = 14; // 回收价格
+  optional string call_put_flag = 16; // 认购/认沽标志
+  optional int64 last_trade_date = 18; // 最后交易日
+  optional int64 maturity_date = 13; // 到期日
+  // ---------- 美股静态数据 ----------
+  //  Q Nasdaq Global Select MarketSM
+  //  G Nasdaq Global MarketSM
+  //  S Nasdaq Capital Market®
+  //  N New York Stock Exchange (NYSE)
+  //  A NYSE MKT
+  //  P NYSE Arca
+  //  Z BATS Z Exchange
+  //  V Investors’ Exchange, LLC
+  optional string market_category = 17; // 市场类别
+  // ---------- 期货静态数据 ----------
+  optional string product_code = 22; // 品种代码
+  optional string contract_code = 23; // 合约代码
+  optional double contract_size = 24; // 合约乘数
+  optional bool is_main = 25; // 是否主力合约
+  optional bool is_continuous = 26; // 是否主连合约
+  optional int64 expire_time = 27; // 到期时间
+  optional int64 last_trade_time = 28; // 最后交易时间
+  // ---------- 外汇静态数据 ----------
+  optional string from = 29; // 源货币
+  optional string to = 30; // 兑换目标货币
+  // ---------- 暗盘静态数据 ----------
+  optional int64 open_time = 31; // 开始时间
+  optional int64 close_time = 32; // 结束时间
+}
