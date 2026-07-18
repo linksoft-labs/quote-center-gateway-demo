@@ -185,7 +185,7 @@ func main() {
 
 	subType := pb.SubType_SubType_QUOTE
 	securities := make([]*pb.Security, 0)
-	// flag := pb.Flag_Flag_GRAY 暗盘
+	// flag := pb.Flag_Flag_GRAY 港交所暗盘
 	flag := pb.Flag_Flag_REALTIME
 	for sec := range strings.SplitSeq(symbol, ",") {
 		securities = append(securities, &pb.Security{

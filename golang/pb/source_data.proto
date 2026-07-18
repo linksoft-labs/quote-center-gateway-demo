@@ -27,6 +27,7 @@ enum SubType {
   SubType_BROKER = 3; // 经纪队列 B
   SubType_BIDDING = 4; // 盘前盘后数据 A
   SubType_STATIC = 5; // 静态数据 S
+  SubType_EXTEND_QUOTE = 6; // 延长交易时段行情数据 E
 }
 
 // Source 数据源
@@ -152,6 +153,7 @@ message SecurityData {
   optional Broker broker = 5; // 经纪队列 B
   optional Static static = 6; // 静态数据 S
   optional Bidding bidding = 7; // 盘前盘后 A 仅美股
+  optional ExtendQuote extend_quote = 8; // 延长交易时段行情 E 仅A股
 }
 
 // Resp 响应消息
@@ -195,6 +197,16 @@ message Quote {
   optional double volume_float_part = 15; // 成交量，浮点部分，取值>= 0.0、< 1.0
 }
 
+// Quote 行情数据
+message ExtendQuote {
+  optional int64 time = 1; // 最新时间
+  optional double close = 6; // 收盘价
+  optional int64 volume = 7; // 成交量
+  optional double amount = 12; // 成交额
+  optional int64 bid_size = 13; // 买盘数量 仅A股
+  optional int64 ask_size = 14; // 卖盘数量 仅A股
+}
+
 // Bidding 盘前盘后行情数据 仅美股
 message Bidding {
   optional int64 time = 1; // 最新时间
@@ -216,7 +228,7 @@ message Trade {
   optional int64 quantity = 4; // 成交量
   optional int64 position_quantity = 8; // 持仓变化量 仅期货
   optional TrdType trd_type = 5; // 交易类型
-  optional double quantity_float_part = 6; // 成交量浮点部分s
+  optional double quantity_float_part = 6; // 成交量浮点部分
 }
 
 // Order 盘口数据
