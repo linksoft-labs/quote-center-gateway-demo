@@ -101,10 +101,11 @@ enum TrdType {
   TrdType_ODD_LOT = 5; // 碎股交易
   TrdType_AUCTION = 6; // 竞价交易
   TrdType_OVERSEAS = 7;// 海外交易
-  // ---------- 美股交易类型（未实装） ----------
-  TrdType_AUTO = 64; // 自动对盘（美股）
+  // ---------- 美股交易类型 ----------
+  TrdType_ACQUISITION = 65; // 收购交易
   TrdType_BUNCHED = 66; // 批量交易
   TrdType_CASH = 67; // 现金交易
+  TrdType_DISTRIBUTION = 68; // 分销交易
   TrdType_INTER_MARKET = 70; // 跨市场交易
   TrdType_BUNCHED_SOLD = 71; // 批量卖出
   TrdType_PRICE_VARIATION = 72; // 离价交易
@@ -117,10 +118,12 @@ enum TrdType {
   TrdType_PRIOR_REFERENCE_PRICE = 80; // 前参考价
   TrdType_MARKET_CENTER_OPEN_PRICE = 81; // 中央开盘价
   TrdType_SELLER = 82; // 卖方
+  TrdType_SPLIT_TRADE = 83; // 分割交易
   TrdType_FORM_T = 84; // T类交易（盘前和盘后交易）
   TrdType_EXTENDED_TRADING = 85; // 延长交易时段
   TrdType_CONTINGENT = 86; // 合单交易
   TrdType_AVERAGE_PRICE = 87; // 平均价成交
+  TrdType_CROSS_TRADE = 88; // 跨市场交易
   TrdType_SOLD = 90; // 场外售出
   TrdType_ODD_LOT_CROSS = 120; // 碎股跨市场交易
   TrdType_DERIVATIVELY_PRICED = 52; // 衍生工具定价
