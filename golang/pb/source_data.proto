@@ -63,6 +63,8 @@ enum Market {
   Market_INE = 13; // 国际能源交易中心
   Market_FOREX = 14; // 外汇市场
   Market_USOTC = 15; // 美股OTC市场
+  Market_CBOT = 16; // 芝加哥期货交易所
+  Market_ICEU = 17; // 洲际交易所
 }
 
 // SecurityType 证券类型
